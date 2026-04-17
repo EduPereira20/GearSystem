@@ -1,0 +1,30 @@
+    .form-label { color: #cbd5e1; font-weight: 500; }
+    .form-control, .form-select {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: white;
+      padding: 10px;
+    }
+    .form-control:focus, .form-select:focus {
+      background: #0f172a;
+      color: white;
+      border-color: #38bdf8;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.3 );
+    }
+    .btn-save {
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: bold;
+      border: none;
+      padding: 12px 30px;
+      transition: 0.3s;
+    }
+    .btn-save:hover { background: #0ea5e9; transform: translateY(-2px); }
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid #475569;
+      color: #cbd5e1;
+      padding: 12px 30px;
+    }
+    .btn-cancel:hover { background: #1e293b; color: white; }
+    body { background: #0f172a; color: white; }
