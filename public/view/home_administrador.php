@@ -6,17 +6,17 @@
   <title>GearSystem Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="../styles/dashboard.css">
+  <link rel="stylesheet" href="../assets/css/dashboard.css">
 </head>
 <body>
 
   <aside class="sidebar">
     <h3 class="logo mb-4">⚙ GearSystem</h3>
-    <a href="home_administrador.html" class="menu-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a href="home_administrador.php" class="menu-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
     <a href="#" class="menu-link"><i class="bi bi-file-earmark-text"></i> Ordem de serviço</a>
-    <a href="faturamento_mensal.html" class="menu-link"><i class="bi bi-cash-stack"></i> Faturamento</a>
+    <a href="#" class="menu-link"><i class="bi bi-cash-stack"></i> Faturamento</a>
     <a href="#" class="menu-link"><i class="bi bi-people"></i> Clientes</a>
-    <a href="cadastro_mecanicos.html" class="menu-link active" style="background: #1e293b; color: white;"><i class="bi bi-tools"></i> Cadastro de mecânicos</a>
+    <a href="cadastro_mecanicos.php" class="menu-link active" style="background: #1e293b; color: white;"><i class="bi bi-tools"></i> Cadastro de mecânicos</a>
     <a href="#" class="menu-link"><i class="bi bi-hand-index-thumb"></i> Operações manuais</a>
 
     <button class="btn btn-dark w-100 text-start mt-2" data-bs-toggle="collapse" data-bs-target="#usuariosMenu">
@@ -24,8 +24,8 @@
     </button>
 
     <div class="collapse submenu" id="usuariosMenu">
-      <a href="cadastro_usuario.html" class="submenu-link">Cadastro Usuário</a>
-      <a href="listar_usuarios.html" class="submenu-link">Listar Usuário</a>
+      <a href="cadastro_usuario.php" class="submenu-link">Cadastro Usuário</a>
+      <a href="listar_usuarios.php" class="submenu-link">Listar Usuário</a>
     </div>
 
     <button class="btn btn-dark w-100 text-start mt-2" data-bs-toggle="collapse" data-bs-target="#adminMenu">

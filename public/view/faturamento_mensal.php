@@ -8,7 +8,6 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<!-- O link abaixo assume que seu CSS está na pasta styles -->
 <link rel="stylesheet" href="../styles/dashboard.css">
 
 <style>
@@ -85,11 +84,11 @@ body {
 <!-- SIDEBAR -->
   <aside class="sidebar">
     <h3 class="logo mb-4">⚙ GearSystem</h3>
-    <a href="home_administrador.html" class="menu-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a href="home_administrador.php" class="menu-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
     <a href="#" class="menu-link"><i class="bi bi-file-earmark-text"></i> Ordem de serviço</a>
-    <a href="faturamento_mensal" class="menu-link"><i class="bi bi-cash-stack"></i> Faturamento</a>
+    <a href="#" class="menu-link"><i class="bi bi-cash-stack"></i> Faturamento</a>
     <a href="#" class="menu-link"><i class="bi bi-people"></i> Clientes</a>
-    <a href="cadastro_mecanicos.html" class="menu-link active" style="background: #1e293b; color: white;"><i class="bi bi-tools"></i> Cadastro de mecânicos</a>
+    <a href="cadastro_mecanicos.php" class="menu-link active" style="background: #1e293b; color: white;"><i class="bi bi-tools"></i> Cadastro de mecânicos</a>
     <a href="#" class="menu-link"><i class="bi bi-hand-index-thumb"></i> Operações manuais</a>
 
     <button class="btn btn-dark w-100 text-start mt-2" data-bs-toggle="collapse" data-bs-target="#usuariosMenu">
@@ -97,8 +96,8 @@ body {
     </button>
 
     <div class="collapse submenu" id="usuariosMenu">
-      <a href="cadastro_usuario.html" class="submenu-link">Cadastro Usuário</a>
-      <a href="listar_usuarios.html" class="submenu-link">Listar Usuário</a>
+      <a href="cadastro_usuario.php" class="submenu-link">Cadastro Usuário</a>
+      <a href="listar_usuarios.php" class="submenu-link">Listar Usuário</a>
     </div>
 
     <button class="btn btn-dark w-100 text-start mt-2" data-bs-toggle="collapse" data-bs-target="#adminMenu">
@@ -113,13 +112,13 @@ body {
 
 <!-- CONTEÚDO -->
 <main class="content">
-    <h2 class="mb-4">Gerenciar Usuários</h2>
+    <h2 class="mb-4">Gerencia seu Faturamento</h2>
 
     <!-- LISTAGEM E BUSCA -->
     <div class="card-custom">
-        <h4 class="mb-3">Buscar Usuário</h4>
+        <h4 class="mb-3">Buscar Ordens de serviço</h4>
         <div class="input-group mb-4">
-            <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="Digite nome ou e-mail do usuário">
+            <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="Digite o ID da ordem de serviço">
             <button class="btn btn-primary">
                 <i class="bi bi-search"></i> Buscar
             </button>
@@ -128,18 +127,18 @@ body {
         <table class="table table-dark table-hover">
             <thead>
                 <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Usuário</th>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Telefone</th>
                     <th>Status</th>
-                    <th>Ação</th>
+                    <th>Visualizar</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>João Silva</td>
-                    <td>joao@email.com</td>
-                    <td>joao123</td>
+                    <td>1</td>
+                    <td>Eduardo</td>
+                    <td>61 98100-9630</td>
                     <td><span class="badge bg-success">Ativo</span></td>
                     <td>
                         <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#resetModal" onclick="prepararReset('João Silva', 'joao@email.com')">
@@ -148,9 +147,9 @@ body {
                     </td>
                 </tr>
                 <tr>
-                    <td>Maria Souza</td>
-                    <td>maria@email.com</td>
-                    <td>maria123</td>
+                    <td>2</td>
+                    <td>Damasceno</td>
+                    <td>61 945872250</td>
                     <td><span class="badge bg-success">Ativo</span></td>
                     <td>
                         <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#resetModal" onclick="prepararReset('Maria Souza', 'maria@email.com')">
@@ -168,7 +167,7 @@ body {
     <div class="modal-dialog">
         <div class="modal-content bg-dark text-white border-secondary">
             <div class="modal-header border-secondary">
-                <h5 class="modal-title">Confirmar Reinício de Senha</h5>
+                <h5 class="modal-title">Ordem de serviço</h5>
                 <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -179,7 +178,6 @@ body {
             </div>
             <div class="modal-footer border-secondary">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-                <button class="btn btn-warning" id="btnConfirmarReset" onclick="executarReset(event)">Confirmar</button>
             </div>
         </div>
     </div>
