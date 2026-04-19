@@ -1,33 +1,21 @@
 <?php
 
-var_dump($_GET);
+// var_dump($_GET);
 
 $mensagem = '';
 $tipo = '';
 
 if (isset($_GET['success'])) {
-    if ($_GET['success'] == 'sucess') {
+    if ($_GET['success'] === 'usuario_cadastrado') {
         $mensagem = "Usuário cadastrado com sucesso!";
         $tipo = "success";
     }
 }
 
 if (isset($_GET['error'])) {
-
-    switch ($_GET['error']) {
-        case 'usuario_existe':
-            $mensagem = "Usuário já existe!";
-            $tipo = "warning";
-            break;
-
-        case 'erro_insercao':
-            $mensagem = "Erro ao cadastrar usuário.";
-            $tipo = "danger";
-            break;
-
-        default:
-            $mensagem = "Erro desconhecido.";
-            $tipo = "danger";
+    if ($_GET['error'] === 'usuario_existe') {
+        $mensagem = "Usuário já existe!";
+        $tipo = "danger";
     }
 }
 ?>
@@ -128,7 +116,7 @@ if (isset($_GET['error'])) {
 
 <main class="content">
 
-  <!-- 🔥 ALERTA -->
+
   <?php if ($mensagem): ?>
     <div class="alert alert-<?= $tipo ?> alert-dismissible fade show" role="alert">
       <?= $mensagem ?>
@@ -139,7 +127,7 @@ if (isset($_GET['error'])) {
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi bi-person-plus text-info"></i> Cadastro de Usuário</h2>
 
-    <a href="dashboard.html" class="btn btn-outline-light btn-sm">
+    <a href="home_administrador.php" class="btn btn-outline-light btn-sm">
       <i class="bi bi-arrow-left"></i> Voltar
     </a>
   </div>

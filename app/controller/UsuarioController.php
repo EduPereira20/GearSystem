@@ -38,7 +38,7 @@ class UsuarioController {
         );
 
         if ($sucesso) {
-            header("Location: /view/cadastro_usuario.php?success=1");
+            header("Location: /view/cadastro_usuario.php?success=usuario_cadastrado");
         } else {
             header("Location: /view/cadastro_usuario.php?error=1");
         }
