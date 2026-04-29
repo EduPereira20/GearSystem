@@ -1,7 +1,12 @@
 <?php
-require_once __DIR__ . '../../app/config/database.php';
+require_once __DIR__ . '../../app/controller/AdministradorController.php';
 
-$conn = Database::connect();
+$dao = new AdministradorDAO();
 
-echo "Conexão realizada com sucesso"
+$dados = $dao->listar();
+
+echo "<pre>";
+print_r($dados);
+echo "</pre>";
+
 ?>

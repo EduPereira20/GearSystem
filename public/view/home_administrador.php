@@ -10,7 +10,7 @@
 </head>
 <body>
 
-  <aside class="sidebar">
+    <aside class="sidebar">
     <h3 class="logo mb-4">⚙ GearSystem</h3>
     <a href="home_administrador.php" class="menu-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
     <a href="#" class="menu-link"><i class="bi bi-file-earmark-text"></i> Ordem de serviço</a>
@@ -24,8 +24,9 @@
     </button>
 
     <div class="collapse submenu" id="usuariosMenu">
-      <a href="cadastro_usuario.php" class="submenu-link">Cadastro Usuário</a>
-      <a href="listar_usuarios.php" class="submenu-link">Listar Usuário</a>
+      <a href="/?route=usuario.store" class="submenu-link">Cadastro Usuário</a>
+      <a href="/?route=usuarios" class="submenu-link">Listar Usuário</a>    
+    
     </div>
 
     <button class="btn btn-dark w-100 text-start mt-2" data-bs-toggle="collapse" data-bs-target="#adminMenu">
@@ -33,8 +34,8 @@
     </button>
 
     <div class="collapse submenu" id="adminMenu">
-      <a href="#" class="submenu-link">Cadastro Admin</a>
-      <a href="#" class="submenu-link">Listar Admin</a>
+      <a href="/index.php?route=admin.cadastro" class="submenu-link">Cadastro Administrador</a>
+      <a href="/index.php?route=admin.index" class="submenu-link">Listar Administradores</a>
     </div>
   </aside>
 

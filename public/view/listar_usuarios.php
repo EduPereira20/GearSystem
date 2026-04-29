@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -98,7 +98,7 @@ body {
 
     <div class="collapse submenu" id="usuariosMenu">
       <a href="cadastro_usuario.php" class="submenu-link">Cadastro Usuário</a>
-      <a href="listar_usuarios.php" class="submenu-link">Listar Usuário</a>
+      <a href="/?route=usuarios" class="submenu-link">Listar Usuário</a>
     </div>
 
     <button class="btn btn-dark w-100 text-start mt-2" data-bs-toggle="collapse" data-bs-target="#adminMenu">
@@ -106,7 +106,7 @@ body {
     </button>
 
     <div class="collapse submenu" id="adminMenu">
-      <a href="#" class="submenu-link">Cadastro Admin</a>
+      <a href="/index.php?route=admin.cadastro" class="submenu-link">Cadastro Admin</a>
       <a href="#" class="submenu-link">Listar Admin</a>
     </div>
   </aside>
@@ -115,52 +115,73 @@ body {
 <main class="content">
     <h2 class="mb-4">Gerenciar Usuários</h2>
 
-    <!-- LISTAGEM E BUSCA -->
-    <div class="card-custom">
-        <h4 class="mb-3">Buscar Usuário</h4>
+  <div class="card-custom">
+    <h4 class="mb-3">Buscar Usuário</h4>
+
+    <form method="GET" action="?">
+        <input type="hidden" name="route" value="usuarios">
+
         <div class="input-group mb-4">
-            <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="Digite nome ou e-mail do usuário">
+            <input 
+                type="text" 
+                name="busca"
+                value="<?= $_GET['busca'] ?? '' ?>"
+                class="form-control bg-dark text-white border-secondary" 
+                placeholder="Digite nome ou e-mail do usuário"
+            >
+
             <button class="btn btn-primary">
                 <i class="bi bi-search"></i> Buscar
             </button>
         </div>
+    </form>
 
-        <table class="table table-dark table-hover">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Usuário</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>João Silva</td>
-                    <td>joao@email.com</td>
-                    <td>joao123</td>
-                    <td><span class="badge bg-success">Ativo</span></td>
-                    <td>
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#resetModal" onclick="prepararReset('João Silva', 'joao@email.com')">
-                            <i class="bi bi-key"></i> Reiniciar Senha
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Maria Souza</td>
-                    <td>maria@email.com</td>
-                    <td>maria123</td>
-                    <td><span class="badge bg-success">Ativo</span></td>
-                    <td>
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#resetModal" onclick="prepararReset('Maria Souza', 'maria@email.com')">
-                            <i class="bi bi-key"></i> Reiniciar Senha
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Usuário</th>
+            <th>Status</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <?php if (empty($usuarios)): ?>
+        <tr>
+            <td colspan="5">Nenhum usuário encontrado</td>
+        </tr>
+        <?php else: ?>
+        <?php foreach ($usuarios as $user): ?>
+        <tr>
+            <td><?= $user['nome_completo'] ?></td>
+            <td><?= $user['email'] ?></td>
+            <td><?= $user['usuario'] ?></td>
+
+            <td>
+                <span class="badge bg-success">Ativo</span>
+            </td>
+
+            <td>
+                <button 
+                    class="btn btn-warning btn-sm" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#resetModal"
+                    onclick="prepararReset('<?= $user['nome_completo'] ?>', '<?= $user['email'] ?>')"
+                >
+                    <i class="bi bi-key"></i> Reiniciar Senha
+                </button>
+            </td>
+        </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+
+    </tbody>
+</table>
+</div>
+ 
+</div>
 </main>
 
 <!-- MODAL DE CONFIRMAÇÃO -->
@@ -189,31 +210,64 @@ body {
 
 <script>
 // Função para preencher os dados no modal antes de abrir
-function prepararReset(nome, email ) {
+function prepararReset(nome, email) {
     document.getElementById('resetNome').innerText = nome;
     document.getElementById('resetEmail').innerText = email;
+
+    emailSelecionado = email;
 }
 
-// Função que simula o envio do reset
 function executarReset(event) {
     let btn = event.target;
     const originalText = btn.innerHTML;
 
-    btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Reiniciando...`;
+    // estado: carregando
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Enviando...`;
     btn.disabled = true;
 
-    // Simula uma requisição de 2 segundos
-    setTimeout(() => {
-        alert("Senha reiniciada com sucesso! O e-mail de recuperação foi enviado.");
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-        
-        // Fecha o modal usando a API do Bootstrap
-        const modalElement = document.getElementById('resetModal');
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        modal.hide();
-    }, 2000);
+    fetch('/?route=usuario.reset', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'email=' + encodeURIComponent(emailSelecionado)
+    })
+    .then(response => response.text())
+    .then(data => {
+
+        // ✅ sucesso
+        btn.innerHTML = `<i class="bi bi-check-circle"></i> Enviado!`;
+        btn.classList.remove('btn-warning');
+        btn.classList.add('btn-success');
+
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-warning');
+            btn.disabled = false;
+
+            const modalElement = document.getElementById('resetModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
+        }, 2000);
+
+    })
+    .catch(() => {
+
+        // ❌ erro
+        btn.innerHTML = `<i class="bi bi-x-circle"></i> Erro ao enviar`;
+        btn.classList.remove('btn-warning');
+        btn.classList.add('btn-danger');
+
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('btn-danger');
+            btn.classList.add('btn-warning');
+            btn.disabled = false;
+        }, 2000);
+    });
 }
+
 </script>
 
 </body>

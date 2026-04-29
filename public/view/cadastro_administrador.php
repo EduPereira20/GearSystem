@@ -7,14 +7,14 @@ $tipo = '';
 
 if (isset($_GET['success'])) {
     if ($_GET['success'] === 'usuario_cadastrado') {
-        $mensagem = "Usuário cadastrado com sucesso!";
+        $mensagem = "Administrador cadastrado com sucesso!";
         $tipo = "success";
     }
 }
 
 if (isset($_GET['error'])) {
     if ($_GET['error'] === 'usuario_existe') {
-        $mensagem = "Usuário já existe!";
+        $mensagem = "Administrador já existe!";
         $tipo = "danger";
     }
 }
@@ -24,7 +24,7 @@ if (isset($_GET['error'])) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GearSystem - Cadastro de Usuário</title>
+  <title>GearSystem - Cadastro de Administrador</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -121,7 +121,7 @@ if (isset($_GET['error'])) {
   <?php endif; ?>
 
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-person-plus text-info"></i> Cadastro de Usuário</h2>
+    <h2><i class="bi bi-person-plus text-info"></i> Cadastro de administrador</h2>
 
     <a href="home_administrador.php" class="btn btn-outline-light btn-sm">
       <i class="bi bi-arrow-left"></i> Voltar
@@ -129,7 +129,7 @@ if (isset($_GET['error'])) {
   </div>
 
   <div class="card-custom">
-    <form action="/index.php?route=usuario.store" method="POST">
+    <form action="/index.php?route=admin.cadastro" method="POST">
 
       <div class="row g-3">
 
@@ -166,14 +166,14 @@ if (isset($_GET['error'])) {
 
         <div class="col-md-5">
           <label class="form-label">Cargo / Função</label>
-          <input type="text" name="setor" class="form-control">
+          <input type="text" name="cargo" class="form-control">
         </div>
 
       </div>
 
       <div class="col-12 mt-5 d-flex justify-content-end gap-3">
         <button type="reset" class="btn btn-cancel">Limpar</button>
-        <button type="submit" class="btn btn-save">Cadastrar Usuário</button>
+        <button type="submit" class="btn btn-save">Cadastrar administrador</button>
       </div>
 
     </form>

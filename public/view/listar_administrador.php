@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -8,6 +8,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!-- O link abaixo assume que seu CSS está na pasta styles -->
 <link rel="stylesheet" href="../styles/dashboard.css">
 
 <style>
@@ -82,7 +83,7 @@ body {
 <body>
 
 <!-- SIDEBAR -->
-    <aside class="sidebar">
+  <aside class="sidebar">
     <h3 class="logo mb-4">⚙ GearSystem</h3>
     <a href="home_administrador.php" class="menu-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
     <a href="#" class="menu-link"><i class="bi bi-file-earmark-text"></i> Ordem de serviço</a>
@@ -111,64 +112,83 @@ body {
     </div>
   </aside>
 
-<!-- CONTEÚDO -->
-<main class="content">
-    <h2 class="mb-4">Gerencia seu Faturamento</h2>
 
-    <!-- LISTAGEM E BUSCA -->
-    <div class="card-custom">
-        <h4 class="mb-3">Buscar Ordens de serviço</h4>
+<main class="content">
+    <h2 class="mb-4">Gerenciar Usuários</h2>
+
+  <div class="card-custom">
+    <h4 class="mb-3">Buscar Usuário</h4>
+
+    <form method="GET" action="">
+        <input type="hidden" name="route" value="admin.index">
+
         <div class="input-group mb-4">
-            <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="Digite o ID da ordem de serviço">
+            <input 
+                type="text" 
+                name="busca"
+                value="<?= $_GET['busca'] ?? '' ?>"
+                class="form-control bg-dark text-white border-secondary" 
+                placeholder="Digite nome ou e-mail do administrador"
+            >
+
             <button class="btn btn-primary">
                 <i class="bi bi-search"></i> Buscar
             </button>
         </div>
+    </form>
+
 
         <table class="table table-dark table-hover">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Cliente</th>
-                    <th>Telefone</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Usuário</th>
                     <th>Status</th>
-                    <th>Visualizar</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Eduardo</td>
-                    <td>61 98100-9630</td>
-                    <td><span class="badge bg-success">Ativo</span></td>
-                    <td>
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#resetModal" onclick="prepararReset('João Silva', 'joao@email.com')">
-                            <i class="bi bi-key"></i> Reiniciar Senha
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Damasceno</td>
-                    <td>61 945872250</td>
-                    <td><span class="badge bg-success">Ativo</span></td>
-                    <td>
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#resetModal" onclick="prepararReset('Maria Souza', 'maria@email.com')">
-                            <i class="bi bi-key"></i> Reiniciar Senha
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
+<?php if (count($administradores) > 0): ?>
+    
+    <?php foreach ($administradores as $admin): ?>
+        <tr>
+            <td><?= htmlspecialchars($admin['nome_completo']) ?></td>
+            <td><?= htmlspecialchars($admin['email']) ?></td>
+            <td><?= htmlspecialchars($admin['usuario']) ?></td>
+            <td><span class="badge bg-success">Ativo</span></td>
+            <td>
+                <button 
+    type="button"
+    class="btn btn-warning btn-sm"
+    data-bs-toggle="modal"
+    data-bs-target="#resetModal"
+    onclick="prepararReset('<?= $admin['nome_completo'] ?>', '<?= $admin['email'] ?>')"
+>
+    <i class="bi bi-key"></i> Reiniciar Senha
+</button>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+
+<?php else: ?>
+
+    <tr>
+        <td colspan="5" class="text-center">Nenhum usuário encontrado</td>
+    </tr>
+
+<?php endif; ?>
+</tbody>
         </table>
     </div>
 </main>
 
-<!-- MODAL DE CONFIRMAÇÃO -->
+
 <div class="modal fade" id="resetModal">
     <div class="modal-dialog">
         <div class="modal-content bg-dark text-white border-secondary">
             <div class="modal-header border-secondary">
-                <h5 class="modal-title">Ordem de serviço</h5>
+                <h5 class="modal-title">Confirmar Reinício de Senha</h5>
                 <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -179,6 +199,7 @@ body {
             </div>
             <div class="modal-footer border-secondary">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                <button class="btn btn-warning" onclick="executarReset(event)">Confirmar</button>
             </div>
         </div>
     </div>
@@ -188,31 +209,64 @@ body {
 
 <script>
 // Função para preencher os dados no modal antes de abrir
-function prepararReset(nome, email ) {
+function prepararReset(nome, email) {
     document.getElementById('resetNome').innerText = nome;
     document.getElementById('resetEmail').innerText = email;
+
+    emailSelecionado = email;
 }
 
-// Função que simula o envio do reset
 function executarReset(event) {
     let btn = event.target;
     const originalText = btn.innerHTML;
 
-    btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Reiniciando...`;
+    // estado: carregando
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Enviando...`;
     btn.disabled = true;
 
-    // Simula uma requisição de 2 segundos
-    setTimeout(() => {
-        alert("Senha reiniciada com sucesso! O e-mail de recuperação foi enviado.");
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-        
-        // Fecha o modal usando a API do Bootstrap
-        const modalElement = document.getElementById('resetModal');
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        modal.hide();
-    }, 2000);
+    fetch('/?route=admin.reset', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'email=' + encodeURIComponent(emailSelecionado)
+    })
+    .then(response => response.text())
+    .then(data => {
+
+        // ✅ sucesso
+        btn.innerHTML = `<i class="bi bi-check-circle"></i> Enviado!`;
+        btn.classList.remove('btn-warning');
+        btn.classList.add('btn-success');
+
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-warning');
+            btn.disabled = false;
+
+            const modalElement = document.getElementById('resetModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
+        }, 2000);
+
+    })
+    .catch(() => {
+
+        // ❌ erro
+        btn.innerHTML = `<i class="bi bi-x-circle"></i> Erro ao enviar`;
+        btn.classList.remove('btn-warning');
+        btn.classList.add('btn-danger');
+
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('btn-danger');
+            btn.classList.add('btn-warning');
+            btn.disabled = false;
+        }, 2000);
+    });
 }
+
 </script>
 
 </body>

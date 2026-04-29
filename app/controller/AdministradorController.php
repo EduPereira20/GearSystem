@@ -1,139 +1,78 @@
 <?php
+require_once __DIR__ . '/../dao/AdministradorDAO.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
-require_once __DIR__ . '/../dao/UsuarioDAO.php';
-
-use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-class UsuarioController {
+class AdministradorController {
 
+    public function index() {
+
+        $dao = new AdministradorDAO();
+
+        $busca = $_GET['busca'] ?? null;
+
+        if($busca){
+            $administradores = $dao->buscar($busca);
+        } else{
+            $administradores = $dao->listar();
+        }
+
+        require __DIR__ . '/../../public/view/listar_administrador.php';
+    }
+
+    public function cadastrarAdministrador(){
     
-    public function store() {
-
         $nome_completo = $_POST['nome_completo'] ?? null;
-        $documento = $_POST['documento'] ?? null;
-        $telefone = $_POST['telefone'] ?? null;
-        $setor = $_POST['setor'] ?? null;
         $email = $_POST['email'] ?? null;
+        $documento = $_POST['documento'] ?? null;
         $usuario = $_POST['usuario'] ?? null;
+        $telefone = $_POST['telefone'] ?? null;
+        $cargo = $_POST['cargo'] ?? null;
 
         $senha = password_hash($usuario, PASSWORD_DEFAULT);
 
-        $dao = new UsuarioDAO();
+        $dao = new AdministradorDAO();
 
-        $existe = $dao->usuarioExiste($usuario);
+        $existe = $dao->administradorExiste($usuario);
 
-        if ($existe > 0) {
-            header("Location: /view/cadastro_usuario.php?error=usuario_existe");
+        if($existe > 0){
+            header("Location: /view/cadastro_administrador.php?error=usuario_existe");
             exit;
         }
-
-        $sucesso = $dao->insert(
+        
+        $sucesso = $dao->insertAdmin(
             $nome_completo,
             $documento,
             $telefone,
-            $setor,
             $email,
             $usuario,
-            $senha
+            $senha,
+            $cargo
         );
 
+
         if ($sucesso) {
-            header("Location: /view/cadastro_usuario.php?success=usuario_cadastrado");
-        } else {
-            header("Location: /view/cadastro_usuario.php");
-        }
+    header("Location: /view/cadastro_administrador.php?success=usuario_cadastrado");
+} else {
+    header("Location: /view/cadastro_administrador.php");
+}
+exit;   }
 
-        exit;
-    }
-
-    public function listarUsuarios() {
-
-        $dao = new UsuarioDAO();
-
-        $busca = $_GET['busca'] ?? '';
-
-        if ($busca) {
-            $usuarios = $dao->buscar($busca);
-        } else {
-            $usuarios = $dao->listar();
-        }
-
-        require __DIR__ . '/../../public/view/listar_usuarios.php';
-    }
-
-   
-    public function login() {
-
-        session_start();
-
-        $usuario = $_POST['usuario'] ?? null;
-        $senha = $_POST['senha'] ?? null;
-
-        $dao = new UsuarioDAO();
-        $usuarioBanco = $dao->buscarPorUsuario($usuario);
-
-        if (!$usuarioBanco || !password_verify($senha, $usuarioBanco['senha'])) {
-            header("Location: /index.php?route=login.form&error=login_invalido");
-            exit;
-        }
-
-        $_SESSION['usuario'] = $usuarioBanco['usuario'];
-        $_SESSION['id_usuario'] = $usuarioBanco['id_usuario'];
-        $_SESSION['primeiro_login'] = $usuarioBanco['primeiro_login'];
-
-        if ($usuarioBanco['primeiro_login'] == 1) {
-            header("Location: /index.php?route=trocar.senha");
-            exit;
-        }
-
-        header("Location: /index.php");
-        exit;
-    }
-
-    
-    public function trocarSenha() {
-
-        session_start();
-
-        $nova = $_POST['nova_senha'] ?? null;
-        $confirmar = $_POST['confirmar_senha'] ?? null;
-
-        if (!$nova || !$confirmar) {
-            header("Location: /index.php?route=trocar.senha&error=campos_vazios");
-            exit;
-        }
-
-        if ($nova !== $confirmar) {
-            header("Location: /index.php?route=trocar.senha&error=senha_diferente");
-            exit;
-        }
-
-        $senhaHash = password_hash($nova, PASSWORD_DEFAULT);
-
-        $dao = new UsuarioDAO();
-        $dao->atualizarSenha($_SESSION['id_usuario'], $senhaHash);
-
-        
-        $_SESSION['primeiro_login'] = 0;
-
-        header("Location: /index.php");
-        exit;
-    }
-
-    public function enviarReset()
+public function enviarReset()
 {
     $email = $_POST['email'] ?? null;
 
     if (!$email) {
-        echo 'erro';
+        echo 'erro: ' . $mail->ErrorInfo;
         return;
     }
 
-    $dao = new UsuarioDAO();
+    $dao = new AdministradorDAO();
 
     // 🔍 Buscar usuário pelo e-mail
-    $usuarioData = $dao->buscarPorEmail($email);
+    $usuarioData = $dao->buscarPorEmailAdm($email);
 
     if (!$usuarioData) {
         echo 'erro';
@@ -222,4 +161,5 @@ class UsuarioController {
         echo 'erro';
     }
 }
+
 }
